@@ -24,10 +24,3 @@ function closeModalOnOverlay(evt) {
     closeModal(evt.target);
   }
 };
-
-document.querySelectorAll('.popup__close').forEach(closeButton => {
-  closeButton.addEventListener('click', () => {
-    const popup = closeButton.closest('.popup');
-    closeModal(popup);
-  });
-});
