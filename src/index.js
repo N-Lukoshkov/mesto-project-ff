@@ -28,24 +28,19 @@ function openImagePopup(link, name) {
   popupImage.alt = name;
   popupCaption.textContent = name;
   openModal(imagePopup);
-  closePopupButton(imagePopup);
 };
 
-function closePopupButton(popup) {
-  const closeButton = popup.querySelector('.popup__close');
-  if (closeButton) {
-    closeButton.addEventListener('click', () => closeModal(popup));
-  };
-};
+document.querySelectorAll('.popup__close').forEach(closeButton => {
+  closeButton.addEventListener('click', () => { 
+    closeModal(closeButton.closest('.popup')); 
+  }); 
+}); 
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
 
-  const nameValue = nameInput.value;
-  const jobValue = jobInput.value;
-
-  profileName.textContent = nameValue;
-  profileDescription.textContent = jobValue;
+  profileName.textContent = nameInput.value;
+  profileDescription.textContent = jobInput.value;
 
   closeModal(editPopup);
 };
@@ -56,12 +51,10 @@ editProfileButton.addEventListener('click', () => {
   nameInput.value = profileName.textContent;
   jobInput.value = profileDescription.textContent;
   openModal(editPopup);
-  closePopupButton(editPopup);
 });
 
 addCardButton.addEventListener('click', () => {
   openModal(newCardPopup);
-  closePopupButton(newCardPopup);
 });
 
 newCardForm.addEventListener('submit', (evt) => {
@@ -70,7 +63,7 @@ newCardForm.addEventListener('submit', (evt) => {
     name: inputNameCard.value,
     link: inputLinkCard.value,
   };
-  placesList.prepend(createCard(newCard, deleteCard, likeCard));
+  placesList.prepend(createCard(newCard, deleteCard, likeCard, openImagePopup));
   closeModal(newCardPopup);
   newCardForm.reset();
 });
