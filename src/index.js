@@ -156,13 +156,21 @@ newCardForm.addEventListener('submit', (evt) => {
     link: cardLinkInput.value,
   };
   
+  const submitButton = newCardForm.querySelector(validationConfig.submitButtonSelector);
+  submitButton.textContent = 'Создание...';
+  submitButton.disabled = true;
+
   uploadCard(newCard)
     .then(data => {
       placesList.prepend(createCard(data, data.owner._id, cardConfig));
       closeModal(newCardPopup);
       newCardForm.reset();
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log(err))
+    .finally(() => {
+      submitButton.textContent = 'Создать';
+      submitButton.disabled = false;
+    });
 });
 
 // удаление карточек
@@ -171,10 +179,10 @@ let cardToDelete;
 
 deleteButton.addEventListener('click', (event) => {
     event.preventDefault();
-    deleteCardListener();
+    deleteCard();
 });
-``
-function deleteCardListener() {
+
+function deleteCard() {
     apiDeleteCard(cardToDelete.cardId)
         .then(() => {
             cardToDelete.cardElement.remove();
@@ -196,6 +204,6 @@ enableValidation(validationConfig);
 Promise.all([getUserProfile(), getInitialCards()])
   .then(data => {
     renderProfile(data[0]);
-    renderCards(data[1], data[0].id);
+    renderCards(data[1], data[0]._id);
   })
   .catch(err => console.log(err));
