@@ -90,6 +90,7 @@ formUpdateAvatar.addEventListener('submit', (evt) => submitUpdateAvatar(evt, inp
 
 function submitUpdateAvatar(evt, avatar) {
   evt.preventDefault();
+  evt.submitter.textContent = 'Сохранение...'
   updateAvatar(avatar)
     .then((data) => {
       profileAvatar.style.backgroundImage = `url(${data.avatar})`;
@@ -97,8 +98,8 @@ function submitUpdateAvatar(evt, avatar) {
     })
     .catch(error => console.log(error))
     .finally(() => {
-      clearValidation(formUpdateAvatar, validationConfig);
-    });
+      evt.submitter.textContent = 'Сохранить';
+    })
 }
 
 // редактирование профиля
@@ -114,7 +115,7 @@ editProfileButton.addEventListener('click', () => {
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-  
+  evt.submitter.textContent = 'Сохранение...';
   const name = nameInput.value;
   const description = jobInput.value;
   
@@ -123,7 +124,10 @@ function handleProfileFormSubmit(evt) {
       renderProfile(data);
       closeModal(editPopup);
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log(err))
+    .finally(() => {
+      evt.submitter.textContent = 'Сохранить';
+    })
 }
 
 function renderProfile(res) {
